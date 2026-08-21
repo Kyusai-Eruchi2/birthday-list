@@ -279,7 +279,7 @@ function validateDay() {
 }
 
 // ==============================
-// 実在する日付かチェック
+// 実在する月日かチェック
 // ==============================
 
 function validateRealDate() {
@@ -288,20 +288,28 @@ function validateRealDate() {
         return false;
     }
 
-
     const month = Number(monthInput.value);
-
     const day = Number(dayInput.value);
 
 
-    // うるう年ではない年を基準にする
-    const date = new Date(2023, month - 1, day);
+    // 各月の日数
+    const daysInMonth = {
+        1: 31,
+        2: 29,
+        3: 31,
+        4: 30,
+        5: 31,
+        6: 30,
+        7: 31,
+        8: 31,
+        9: 30,
+        10: 31,
+        11: 30,
+        12: 31
+    };
 
 
-    if (
-        date.getMonth() !== month - 1 ||
-        date.getDate() !== day
-    ) {
+    if (day > daysInMonth[month]) {
 
         dayError.textContent =
             "その日付は存在しません。";
@@ -321,15 +329,18 @@ nameInput.addEventListener("input", validateName);
 
 monthInput.addEventListener("input", () => {
 
-    // 数字以外を入力した場合
     if (!/^[0-9]*$/.test(monthInput.value)) {
 
         monthError.textContent =
             "月は数字のみ入力できます。";
 
-    } else {
+        return;
+    }
 
-        validateMonth();
+
+    if (validateMonth()) {
+
+        validateRealDate();
 
     }
 
@@ -343,9 +354,13 @@ dayInput.addEventListener("input", () => {
         dayError.textContent =
             "日は数字のみ入力できます。";
 
-    } else {
+        return;
+    }
 
-        validateDay();
+
+    if (validateDay()) {
+
+        validateRealDate();
 
     }
 
