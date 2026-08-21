@@ -195,10 +195,21 @@ function validateMonth() {
     monthError.textContent = "";
 
 
+    // 空欄
+    if (month === "") {
+
+        monthError.textContent =
+            "月を入力してください。";
+
+        return false;
+    }
+
+
+    // 数字以外
     if (!/^[0-9]+$/.test(month)) {
 
         monthError.textContent =
-            "月は数字で入力してください。";
+            "月は数字のみ入力できます。";
 
         return false;
     }
@@ -206,6 +217,8 @@ function validateMonth() {
 
     const value = Number(month);
 
+
+    // 1～12以外
     if (value < 1 || value > 12) {
 
         monthError.textContent =
@@ -218,7 +231,6 @@ function validateMonth() {
     return true;
 }
 
-
 // ==============================
 // 日チェック
 // ==============================
@@ -230,10 +242,21 @@ function validateDay() {
     dayError.textContent = "";
 
 
+    // 空欄
+    if (day === "") {
+
+        dayError.textContent =
+            "日を入力してください。";
+
+        return false;
+    }
+
+
+    // 数字以外
     if (!/^[0-9]+$/.test(day)) {
 
         dayError.textContent =
-            "日は数字で入力してください。";
+            "日は数字のみ入力できます。";
 
         return false;
     }
@@ -241,6 +264,8 @@ function validateDay() {
 
     const value = Number(day);
 
+
+    // 1～31以外
     if (value < 1 || value > 31) {
 
         dayError.textContent =
@@ -252,7 +277,6 @@ function validateDay() {
 
     return true;
 }
-
 
 // ==============================
 // 実在する日付かチェック
@@ -266,11 +290,12 @@ function validateRealDate() {
 
 
     const month = Number(monthInput.value);
+
     const day = Number(dayInput.value);
 
 
-    // 2024年はうるう年
-    const date = new Date(2024, month - 1, day);
+    // うるう年ではない年を基準にする
+    const date = new Date(2023, month - 1, day);
 
 
     if (
@@ -287,7 +312,6 @@ function validateRealDate() {
 
     return true;
 }
-
 
 // ==============================
 // 入力時チェック
