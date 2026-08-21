@@ -164,6 +164,26 @@ function validateName() {
     return true;
 }
 
+// 英数字のみで構成されているか
+const isAlphanumericOnly = /^[a-zA-Z0-9]+$/.test(name);
+
+// 英字＋数字が混在しているか
+const hasLetters = /[a-zA-Z]/.test(name);
+const hasNumbers = /[0-9]/.test(name);
+
+// 長い英数字の不自然な羅列
+if (
+    isAlphanumericOnly &&
+    name.length >= 15 &&
+    hasLetters &&
+    hasNumbers
+) {
+    nameError.textContent =
+        "不自然な文字列は登録できません。";
+
+    return false;
+}
+
 
 // ==============================
 // 月チェック
