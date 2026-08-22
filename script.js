@@ -404,13 +404,97 @@ form.addEventListener("submit", event => {
     };
 
 
-    console.log("登録データ:", newBirthday);
+    // ==============================
+    // Cloudflare Workerへ登録
+    // ==============================
+
+    submitButton.disabled = true;
+
+    submitButton.textContent = "登録中...";
 
 
-    alert(
-        "入力内容は正常です！\n\n" +
-        `${newBirthday.name}\n` +
-        `${newBirthday.month}月${newBirthday.day}日`
-    );
+    fetch("https://birthday-api.kyusai-eruchi.workers.dev/", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(newBirthday)
+
+    })
+    .then(response => response.json())
+
+    .then(result => {
+
+        if (!result.success) {
+
+            alert(result.message);
+
+            return;
+        }
+
+
+        alert(
+            "誕生日を登録しました！\n\n" +
+            `${newBirthday.name}\n` +
+            `${newBirthday.month}月${newBirthday.day}日`
+        );
+
+
+        // フォームをリセット
+        form.reset();
+
+        nameError.textContent = "";
+        monthError.textContent = "";
+        dayError.textContent = "";
+
+
+        // GitHub上の最新データを再取得
+        return fetch("birthday.json?time=" + Date.now());
+
+    })
+
+    .then(response => {
+
+        if (!response) {
+            return;
+        }
+
+        return response.json();
+
+    })
+
+    .then(data => {
+
+        if (!data) {
+            return;
+        }
+
+        birthdays = data;
+
+        displayBirthdays();
+
+    })
+
+    .catch(error => {
+
+        console.error(error);
+
+        alert(
+            "登録処理中にエラーが発生しました。\n" +
+            "もう一度お試しください。"
+        );
+
+    })
+
+    .finally(() => {
+    
+        submitButton.disabled = false;
+
+        submitButton.textContent = "登録";
+
+    });
 
 });
