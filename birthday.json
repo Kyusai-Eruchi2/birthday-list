@@ -8,5 +8,10 @@
     "name": "テスト花子",
     "month": 10,
     "day": 2
+  },
+  {
+    "name": "Workerテスト",
+    "month": 8,
+    "day": 22
   }
 ]
